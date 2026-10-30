@@ -45,6 +45,9 @@ export function getBreadcrumbs(pathname: string): Crumb[] {
   if (section === 'learn') {
     return [{ label: 'learn', to: '/learn' }, ...(slug ? [{ label: slug.replace(/-/g, ' ') }] : [])]
   }
+  if (section === 'privacy') {
+    return [{ label: 'privacy & terms' }]
+  }
   if (section === 'algorithms') {
     return [
       { label: 'algorithms', to: '/sorting/bubble-sort' },

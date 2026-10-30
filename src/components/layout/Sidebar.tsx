@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Settings2 } from 'lucide-react'
 import { Logo } from './Logo'
 import { NavLinks } from './NavLinks'
@@ -23,6 +24,9 @@ export function Sidebar({ onOpenSettings }: SidebarProps) {
             local-first · your progress
             <br />
             stays in this browser
+            <Link to="/privacy" className="sidebar-privacy">
+              Privacy & terms
+            </Link>
           </div>
         </div>
       </div>

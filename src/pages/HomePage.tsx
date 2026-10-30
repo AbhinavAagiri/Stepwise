@@ -220,9 +220,9 @@ export function HomePage() {
           <Link to="/sorting/merge-sort">Sorting</Link>
           <Link to="/pathfinding">Pathfinding</Link>
           <Link to="/learn">Learn</Link>
-          <a href="https://vite.dev" target="_blank" rel="noreferrer">
-            Built with Vite
-          </a>
+          <Link to="/privacy" className="btn btn-sm btn-outline footer-privacy">
+            Privacy policy
+          </Link>
         </div>
       </footer>
     </div>

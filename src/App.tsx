@@ -8,6 +8,7 @@ import { PathfindingPage } from './pages/PathfindingPage'
 import { StructuresPage } from './pages/StructuresPage'
 import { RecursionPage } from './pages/RecursionPage'
 import { LearnPage, LearnTopicPage } from './pages/LearnPage'
+import { PrivacyPage } from './pages/PrivacyPage'
 
 function NotFoundPage() {
   return (
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="recursion/:slug" element={<RecursionPage />} />
             <Route path="learn" element={<LearnPage />} />
             <Route path="learn/:slug" element={<LearnTopicPage />} />
+            <Route path="privacy" element={<PrivacyPage />} />
             <Route path="algorithms" element={<Navigate to="/sorting/bubble-sort" replace />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

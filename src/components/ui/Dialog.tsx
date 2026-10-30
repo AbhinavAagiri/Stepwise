@@ -1,6 +1,6 @@
-import { useEffect, useId, useRef, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import { AnimatePresence, motion } from 'motion/react'
+import { motion } from 'motion/react'
 import { X } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { useAppState } from '../../state/AppState'
@@ -35,6 +35,17 @@ export function Dialog({
   const closeRef = useRef(onClose)
   closeRef.current = onClose
   const { reduceMotion } = useAppState()
+  const [rendered, setRendered] = useState(open)
+
+  useEffect(() => {
+    if (open) {
+      setRendered(true)
+      return
+    }
+    if (!rendered) return
+    const timeout = window.setTimeout(() => setRendered(false), reduceMotion ? 0 : 160)
+    return () => window.clearTimeout(timeout)
+  }, [open, rendered, reduceMotion])
 
   useEffect(() => {
     if (!open) return
@@ -79,49 +90,50 @@ export function Dialog({
       document.body.style.overflow = previousOverflow
       previouslyFocused.current?.focus()
     }
-  }, [open])
+  }, [open, rendered])
 
   const duration = reduceMotion ? 0 : 0.16
 
+  if (!rendered) return null
+
   return createPortal(
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          className="overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.14 }}
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) onClose()
-          }}
-        >
-          <motion.div
-            ref={panelRef}
-            className={cn('dialog', size === 'sm' && 'dialog-sm', size === 'lg' && 'dialog-lg', className)}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-            tabIndex={-1}
-            initial={{ opacity: 0, y: reduceMotion ? 0 : 8, scale: reduceMotion ? 1 : 0.995 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: reduceMotion ? 0 : 4 }}
-            transition={{ duration, ease: [0.22, 0.61, 0.36, 1] }}
-          >
-            <div className="dialog-head">
-              <h2 className="dialog-title" id={titleId}>
-                {title}
-              </h2>
-              <button type="button" className="icon-btn" onClick={onClose} aria-label="Close dialog">
-                <X aria-hidden="true" />
-              </button>
-            </div>
-            <div className={cn('dialog-body', bodyClassName)}>{children}</div>
-            {footer && <div className="dialog-foot">{footer}</div>}
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
+    <motion.div
+      className="overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: open ? 1 : 0 }}
+      transition={{ duration: reduceMotion ? 0 : 0.14 }}
+      style={{ pointerEvents: open ? 'auto' : 'none' }}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <motion.div
+        ref={panelRef}
+        className={cn('dialog', size === 'sm' && 'dialog-sm', size === 'lg' && 'dialog-lg', className)}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
+        initial={{ opacity: 0, y: reduceMotion ? 0 : 8, scale: reduceMotion ? 1 : 0.995 }}
+        animate={{
+          opacity: open ? 1 : 0,
+          y: open || reduceMotion ? 0 : 4,
+          scale: open || reduceMotion ? 1 : 0.995,
+        }}
+        transition={{ duration, ease: [0.22, 0.61, 0.36, 1] }}
+      >
+        <div className="dialog-head">
+          <h2 className="dialog-title" id={titleId}>
+            {title}
+          </h2>
+          <button type="button" className="icon-btn" onClick={onClose} aria-label="Close dialog">
+            <X aria-hidden="true" />
+          </button>
+        </div>
+        <div className={cn('dialog-body', bodyClassName)}>{children}</div>
+        {footer && <div className="dialog-foot">{footer}</div>}
+      </motion.div>
+    </motion.div>,
     document.body,
   )
 }

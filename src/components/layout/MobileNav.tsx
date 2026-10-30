@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Settings2 } from 'lucide-react'
 import { Dialog } from '../ui/Dialog'
 import { NavLinks } from './NavLinks'
@@ -31,6 +32,9 @@ export function MobileNav({ open, onClose, onOpenSettings }: MobileNavProps) {
           Settings
         </button>
         <p className="sidebar-fineprint">local-first · progress stays in this browser</p>
+        <Link to="/privacy" className="sidebar-privacy" onClick={onClose}>
+          Privacy & terms
+        </Link>
       </div>
     </Dialog>
   )

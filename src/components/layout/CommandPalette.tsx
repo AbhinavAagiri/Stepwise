@@ -29,6 +29,7 @@ const PAGES: CommandEntry[] = [
   { label: 'Data structures', group: 'Pages', to: '/structures/array', hint: '6 structures' },
   { label: 'Recursion', group: 'Pages', to: '/recursion/factorial', hint: '4 demos' },
   { label: 'Learn', group: 'Pages', to: '/learn', hint: 'topics + quizzes' },
+  { label: 'Privacy & terms', group: 'Pages', to: '/privacy', hint: 'policy' },
 ]
 
 const ALGORITHM_ENTRIES: CommandEntry[] = [
